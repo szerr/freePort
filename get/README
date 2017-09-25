@@ -1,0 +1,2 @@
+获取代理地址
+返回格式： *[]string{protocol://ipaddr:port}
