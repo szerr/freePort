@@ -2,6 +2,7 @@ package get
 
 import (
 	"github.com/PuerkitoBio/goquery"
+	"strconv"
 	"strings"
 )
 
@@ -14,7 +15,7 @@ func Coobobo() func() (*[]string, error) {
 		dtime()
 		info := &[]string{}
 		for page := 1; page <= PAGE_NUM; page += 1 {
-			doc, err := goquery.NewDocument(URL)
+			doc, err := goquery.NewDocument(URL + strconv.Itoa(page))
 			if err != nil {
 				return info, err
 			}
@@ -23,7 +24,7 @@ func Coobobo() func() (*[]string, error) {
 				li := strings.Split(data, "\n")
 				if strings.Contains(li[9], "中国") {
 					ipinfo := strings.Split(li[3], `"`)
-					addr := ipinfo[1] + "." + ipinfo[3] + ipinfo[5] + ":" + strings.Replace(li[6], " ", "", -1)
+					addr := "http://" + ipinfo[1] + "." + ipinfo[3] + ipinfo[5] + ":" + strings.Replace(li[6], " ", "", -1)
 					*info = append(*info, addr)
 				}
 			})
