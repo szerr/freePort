@@ -9,5 +9,6 @@ func init() {
 		Get89ip(),
 		Coobobo(),
 		Superfastip(),
+		Ip181(),
 	}
 }

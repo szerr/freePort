@@ -8,7 +8,7 @@ import (
 func Get89ip() func() (*[]string, error) {
 	//流年免费HTTP代理，
 	API_URL := "http://www.89ip.cn/apijk/?&tqsl=4000&sxa=&sxb=&tta=&ports=&ktip=&cf=1" //
-	dtime := Delay(int64(600))
+	dtime := Delay(300)
 	return func() (*[]string, error) {
 		dtime()
 		info := &[]string{}

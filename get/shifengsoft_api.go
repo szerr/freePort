@@ -8,7 +8,7 @@ import (
 func Shifengsoft() func() (*[]string, error) {
 	//拾风HTTP代理api，有效ip有5000+ 这里提取5k。官方说每台电脑 每分钟内提取次数超过60次封IP。
 	API_URL := `http://ip.shifengsoft.com/get.php?tqsl=6000&submit=%CC%E1++%C8%A1`
-	dtime := Delay(int64(600))
+	dtime := Delay(300)
 	return func() (*[]string, error) {
 		dtime()
 		info := &[]string{}

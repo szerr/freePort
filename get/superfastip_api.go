@@ -12,10 +12,10 @@ type superfastipInfo struct {
 }
 
 func SuperfastipApi() func() (*[]string, error) {
-	/*官方地址 http://www.superfastip.com*/
+	/*官方地址 http://www.superfastip.com
+	官方2小时更新一次*/
 	API_URL := "http://superfastip.com/welcome/getapi"
-	UPDATE_TIME := 7200 //官方2小时更新一次 秒
-	dtime := Delay(int64(UPDATE_TIME))
+	dtime := Delay(300)
 	return func() (*[]string, error) {
 		dtime()
 		info := []string{}

@@ -53,7 +53,7 @@ type IpInfo struct {
 
 func TaobaoIp(ProxyUrl string) (string, error) {
 	resp, err := GetByProxy("http://ip.taobao.com/service/getIpInfo2.php?ip=myip", ProxyUrl)
-	for i := 2; i > 0 && err != nil; i-- {
+	for i := 1; i > 0 && err != nil; i-- {
 		resp, err = GetByProxy("http://ip.taobao.com/service/getIpInfo2.php?ip=myip", ProxyUrl)
 	}
 	//resp, err := GetByProxy("http://www.baidu.com", ProxyUrl)

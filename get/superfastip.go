@@ -9,7 +9,7 @@ import (
 func Superfastip() func() (*[]string, error) {
 	URL := "http://www.superfastip.com/welcome/getips/"
 	PAGE_NUM := 20
-	dtime := Delay(7200)
+	dtime := Delay(300)
 	return func() (*[]string, error) {
 		dtime()
 		info := &[]string{}
