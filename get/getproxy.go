@@ -1,14 +1,19 @@
 package get
 
+import (
+	"errors"
+	"log"
+)
+
 type t struct{}
 
 func GetProxy() (*[]string, error) {
 	mli := make(map[string]t)
 	li := &[]string{}
-	for _, fun := range ProxyBuilder {
+	for funame, fun := range ProxyBuilder {
 		li, err := fun()
 		if err != nil {
-			return li, err
+			log.Println("waring", funame, err)
 		}
 		for _, i := range *li {
 			mli[i] = t{}
@@ -17,5 +22,8 @@ func GetProxy() (*[]string, error) {
 	for k, _ := range mli {
 		*li = append(*li, k)
 	}
-	return li, nil
+	if len(*li) > 0 {
+		return li, nil
+	}
+	return li, errors.New("proxy num 0!")
 }
