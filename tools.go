@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 func VerifyProxy(ProxyUrl string) (string, error) {
@@ -39,6 +40,7 @@ func GetByProxy(url_addr, proxy_addr string) (*http.Response, error) {
 		Transport: &http.Transport{
 			Proxy: http.ProxyURL(proxy),
 		},
+		Timeout: time.Second * 2,
 	}
 	return client.Do(request)
 }
@@ -53,6 +55,23 @@ func TaobaoIp(ProxyUrl string) (string, error) {
 	resp, err := GetByProxy("http://ip.taobao.com/service/getIpInfo2.php?ip=myip", ProxyUrl)
 	for i := 2; i > 0 && err != nil; i-- {
 		resp, err = GetByProxy("http://ip.taobao.com/service/getIpInfo2.php?ip=myip", ProxyUrl)
+	}
+	//resp, err := GetByProxy("http://www.baidu.com", ProxyUrl)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	info := new(IpInfo)
+	if err := json.NewDecoder(resp.Body).Decode(info); err != nil {
+		return "", err
+	}
+	return info.Data.Ip, nil
+}
+
+func TaobaoMyIp() (string, error) {
+	resp, err := http.Get("http://ip.taobao.com/service/getIpInfo2.php?ip=myip")
+	for i := 2; i > 0 && err != nil; i-- {
+		resp, err = http.Get("http://ip.taobao.com/service/getIpInfo2.php?ip=myip")
 	}
 	//resp, err := GetByProxy("http://www.baidu.com", ProxyUrl)
 	if err != nil {
