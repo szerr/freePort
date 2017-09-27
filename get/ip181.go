@@ -38,6 +38,7 @@ func Ip181() func() (*[]string, error) {
 			}
 			*info = append(*info, *analyze(doc)...)
 		}
+		PAGE_NUM = 1
 		return info, nil
 	}
 }

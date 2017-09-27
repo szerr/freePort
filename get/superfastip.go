@@ -33,6 +33,7 @@ func Superfastip() func() (*[]string, error) {
 				*info = append(*info, addr)
 			})
 		}
+		PAGE_NUM = 1
 		return info, nil
 	}
 }

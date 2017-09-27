@@ -29,6 +29,7 @@ func Coobobo() func() (*[]string, error) {
 				}
 			})
 		}
+		PAGE_NUM = 1
 		return info, nil
 	}
 }
