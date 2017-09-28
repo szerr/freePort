@@ -26,19 +26,19 @@ func Ip181() func() (*[]string, error) {
 	return func() (*[]string, error) {
 		dtime()
 		info := &[]string{}
-		doc, err := goquery.NewDocument("http://www.ip181.com/")
+		doc, err := TimeOutDoc("http://www.ip181.com/", 3)
 		if err != nil {
 			return info, err
 		}
 		*info = append(*info, *analyze(doc)...)
 		for page := 1; page <= PAGE_NUM; page += 1 {
-			doc, err := goquery.NewDocument(URL + strconv.Itoa(page) + ".html")
+			doc, err := TimeOutDoc(URL+strconv.Itoa(page)+".html", 3)
 			if err != nil {
 				return info, err
 			}
 			*info = append(*info, *analyze(doc)...)
 		}
-		PAGE_NUM = 1
+		PAGE_NUM = 2
 		return info, nil
 	}
 }

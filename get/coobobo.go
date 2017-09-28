@@ -15,7 +15,8 @@ func Coobobo() func() (*[]string, error) {
 		dtime()
 		info := &[]string{}
 		for page := 1; page <= PAGE_NUM; page += 1 {
-			doc, err := goquery.NewDocument(URL + strconv.Itoa(page))
+			//doc, err := goquery.NewDocument(URL + strconv.Itoa(page))
+			doc, err := TimeOutDoc(URL+strconv.Itoa(page), 3)
 			if err != nil {
 				return info, err
 			}
@@ -29,7 +30,7 @@ func Coobobo() func() (*[]string, error) {
 				}
 			})
 		}
-		PAGE_NUM = 1
+		PAGE_NUM = 2
 		return info, nil
 	}
 }

@@ -1,6 +1,8 @@
 package get
 
 import (
+	"github.com/PuerkitoBio/goquery"
+	"net/http"
 	"time"
 )
 
@@ -15,4 +17,17 @@ func Delay(STime int64) func() { //延迟返回某个时间，单位是秒
 		Sleep2Time(ptime)
 		ptime = time.Now().Unix() + STime
 	}
+}
+
+func TimeOutDoc(url string, timeout int) (*goquery.Document, error) {
+	var doc *goquery.Document
+	resp, err := (&http.Client{Timeout: time.Second * time.Duration(timeout)}).Get(url)
+	if err != nil {
+		return doc, err
+	}
+	doc, err = goquery.NewDocumentFromResponse(resp)
+	if err != nil {
+		return doc, err
+	}
+	return doc, err
 }

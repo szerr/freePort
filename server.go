@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func GetProxy(w http.ResponseWriter, r *http.Request) {
+func getProxy(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(GetAllProxy())
 	if err != nil {
 		log.Println(err)
@@ -14,14 +14,8 @@ func GetProxy(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-func DelProxy(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	DeleteProxy(r.FormValue("key"))
-}
-
 func Server() {
-	http.HandleFunc("/getproxy", GetProxy)
-	http.HandleFunc("/delproxy", DelProxy)
+	http.HandleFunc("/proxy", getProxy)
 	err := http.ListenAndServe(":8082", nil)
 	if err != nil {
 		log.Fatal("ListenAndServer:", err)

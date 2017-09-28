@@ -12,7 +12,8 @@ func Get89ip() func() (*[]string, error) {
 	return func() (*[]string, error) {
 		dtime()
 		info := &[]string{}
-		doc, err := goquery.NewDocument(API_URL)
+		//doc, err := goquery.NewDocument(API_URL)
+		doc, err := TimeOutDoc(API_URL, 3)
 		if err != nil {
 			return info, err
 		}
