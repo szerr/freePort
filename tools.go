@@ -40,7 +40,7 @@ func GetByProxy(url_addr, proxy_addr string) (*http.Response, error) {
 		Transport: &http.Transport{
 			Proxy: http.ProxyURL(proxy),
 		},
-		Timeout: time.Second * 2,
+		Timeout: time.Second * 3,
 	}
 	return client.Do(request)
 }

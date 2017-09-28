@@ -5,17 +5,9 @@ import (
 )
 
 func TestAll(t *testing.T) {
-	/*AllFun := map[string]func() func() (*[]string, error){
-		"Shifengsoft":    Shifengsoft,
-		"SuperfastipApi": SuperfastipApi,
-		"Get89ip":        Get89ip,
-		"Coobobo":        Coobobo,
-		"Superfastip":    Superfastip,
-	}*/
-	AllFun := map[string]func() func() (*[]string, error){"Superfastip": Ip181}
-	for funame, fun := range AllFun {
-		fu := fun()
-		data, err := fu()
+	//ProxyBuilder := map[string]func() func() (*[]string, error){"Superfastip": Ip181}
+	for funame, fun := range ProxyBuilder {
+		data, err := fun()
 		if err != nil {
 			t.Error(funame, err)
 		}
@@ -25,12 +17,4 @@ func TestAll(t *testing.T) {
 			t.Log(funame, "num:", len(*data))
 		}
 	}
-}
-
-func TestGetProxy(t *testing.T) {
-	data, err := GetProxy()
-	if err != nil {
-		t.Error(err)
-	}
-	t.Log("All Proxy num: ", len(*data))
 }

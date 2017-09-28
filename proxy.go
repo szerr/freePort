@@ -15,7 +15,6 @@ func BuildProxy() {
 	}
 	for {
 		proxyM := new(sync.Map)
-		log.Println("GetProxy")
 		data, err := get.GetProxy()
 		if err != nil {
 			log.Fatal("Get ProxyBuilder:", err)

@@ -16,7 +16,7 @@ func Coobobo() func() (*[]string, error) {
 		info := &[]string{}
 		for page := 1; page <= PAGE_NUM; page += 1 {
 			//doc, err := goquery.NewDocument(URL + strconv.Itoa(page))
-			doc, err := TimeOutDoc(URL+strconv.Itoa(page), 3)
+			doc, err := TimeOutDoc(URL+strconv.Itoa(page), 5)
 			if err != nil {
 				return info, err
 			}

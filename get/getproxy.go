@@ -11,11 +11,11 @@ func GetProxy() (*[]string, error) {
 	mli := make(map[string]t)
 	li := &[]string{}
 	for funame, fun := range ProxyBuilder {
-		log.Println("GetProxy:", funame)
 		li, err := fun()
 		if err != nil {
-			log.Println("waring", funame, err)
+			log.Println("Waring:", funame, err)
 		}
+		log.Println("GetProxy:", funame, len(*li))
 		for _, i := range *li {
 			mli[i] = t{}
 		}
