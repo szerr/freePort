@@ -90,10 +90,10 @@ func Sleep2Time(STime int64) int64 { //睡眠到某个时间戳，返回当前�
 	return time.Now().Unix()
 }
 
-func Delay(STime int64) func() { //延迟返回某个时间，单位是秒
+func Delay() func(int) { //延迟返回某个时间，单位是秒
 	var ptime int64 = 0
-	return func() {
+	return func(STime int) {
 		Sleep2Time(ptime)
-		ptime = time.Now().Unix() + STime
+		ptime = time.Now().Unix() + int64(STime)
 	}
 }

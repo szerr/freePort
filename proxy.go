@@ -2,6 +2,7 @@ package proxy
 
 import (
 	"./get"
+	"errors"
 	"log"
 	"sync"
 	"time"
@@ -20,7 +21,7 @@ func BuildProxy() {
 			log.Fatal("Get ProxyBuilder:", err)
 		}
 		*data = append(*data, GetAllProxy()...) //已经保存的代理也重新验证一次
-		log.Println("待验证：", len(*data))
+		log.Println("GetProxy: all", len(*data))
 		for _, proxy := range *data {
 			time.Sleep(time.Millisecond * 10) //每个连接间隔
 			MaxCon <- struct{}{}
@@ -49,19 +50,4 @@ func GetAllProxy() []string {
 
 func DeleteProxy(key string) {
 	ProxyMap.Delete(key)
-}
-
-func RangeProxy() func() string {
-	dtime := Delay(1)
-	data := GetAllProxy()
-	i := len(data)
-	return func() string {
-		if i == 0 {
-			dtime()
-			data = GetAllProxy()
-			i = len(data)
-		}
-		i -= 1
-		return data[i]
-	}
 }
