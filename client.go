@@ -3,8 +3,8 @@ package proxy
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -31,22 +31,57 @@ func RangeProxy(getAllProxy func() ([]string, error), delayTime int) func() (str
 	*/
 	dtime := Delay()
 	var data []string
-	i := 0
+	lend := 0
 	var err error
 	return func() (string, error) {
-		if i == 0 {
+		if lend == 0 {
 			dtime(delayTime)
 			data, err = getAllProxy()
 			if err != nil {
 				return "", err
 			}
-			i = len(data)
-			if i == 0 {
+			lend = len(data)
+			if lend == 0 {
 				return "", errors.New("RangeProxy: getAllProxy return null data")
 			}
 		}
-		i -= 1
-		log.Println(len(data), i)
-		return data[i], nil
+		lend -= 1
+		return data[lend], nil
+	}
+}
+
+func PackGetAllProxy() ([]string, error) {
+	return GetAllProxy(), nil
+}
+
+func PackGetAllProxyFromServer(server_addr string) func() ([]string, error) {
+	return func() ([]string, error) { return getAllProxyFromServer(server_addr) }
+}
+
+func ProxyClient(server_addr string) func(client *http.Client) error {
+	var next func() (string, error)
+	if server_addr == "" {
+		go BuildProxy()
+		time.Sleep(time.Second * 5)
+		for len(GetAllProxy()) > 0 { //等待代理获取和测试
+			time.Sleep(time.Second)
+		}
+		next = RangeProxy(PackGetAllProxy, 2)
+	} else {
+		next = RangeProxy(PackGetAllProxyFromServer(server_addr), 2)
+	}
+	return func(client *http.Client) error {
+		proxy, err := next()
+		if err != nil {
+			return err
+		}
+		proxy_url, err := url.Parse(proxy)
+		if err != nil {
+			return err
+		}
+		client.Transport = &http.Transport{
+			Proxy: http.ProxyURL(proxy_url),
+		}
+		return err
 	}
 }
