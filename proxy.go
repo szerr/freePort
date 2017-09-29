@@ -2,7 +2,6 @@ package proxy
 
 import (
 	"./get"
-	"errors"
 	"log"
 	"sync"
 	"time"
@@ -26,6 +25,7 @@ func BuildProxy() {
 			time.Sleep(time.Millisecond * 10) //每个连接间隔
 			MaxCon <- struct{}{}
 			go func(proxy string) {
+				defer func() { <-MaxCon }()
 				if ip, err := VerifyProxy(proxy); err == nil {
 					if ip != myip {
 						proxyM.Store(proxy, ProxyInfo{})
@@ -35,7 +35,10 @@ func BuildProxy() {
 		}
 		ProxyMap = proxyM
 		log.Println("Sleep")
-		time.Sleep(time.Second * 60 * 10) //获取代理间隔
+		for i := 60 * 5; i > 0; i-- {
+			log.Println(i)
+			time.Sleep(time.Second) //获取代理间隔
+		}
 	}
 }
 
