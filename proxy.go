@@ -15,9 +15,10 @@ func BuildProxy() {
 	}
 	for {
 		proxyM := new(sync.Map)
-		data, err := get.GetProxy()
-		if err != nil {
-			log.Fatal("Get ProxyBuilder:", err)
+		var data *[]string
+		for data, err = get.GetProxy(); err != nil; data, err = get.GetProxy() {
+			log.Println("Get ProxyBuilder:", err)
+			time.Sleep(time.Second)
 		}
 		*data = append(*data, GetAllProxy()...) //已经保存的代理也重新验证一次
 		log.Println("GetProxy: all", len(*data))

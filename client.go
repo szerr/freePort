@@ -3,6 +3,7 @@ package proxy
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -54,24 +55,39 @@ func PackGetAllProxy() ([]string, error) {
 	return GetAllProxy(), nil
 }
 
-func PackGetAllProxyFromServer(server_addr string) func() ([]string, error) {
-	return func() ([]string, error) { return getAllProxyFromServer(server_addr) }
+func PackGetAllProxyFromServer(serverAddr string) func() ([]string, error) {
+	return func() ([]string, error) { return getAllProxyFromServer(serverAddr) }
 }
 
-func ProxyClient(server_addr string) func(client *http.Client) error {
+func ProxyClient(serverAddr string, delayTime int) func(client *http.Client) error {
+	/*
+		delayTime为每次调用间隔，最好>=延迟时间
+		   next := proxy.ProxyClient("http://127.0.0.1:8082")
+		   client := &http.Client{
+		           Timeout: time.Second * 3,
+		   }
+
+		   for err := next(client); err == nil; err = next(client) {
+		           log.Println(client)
+		           resp, err := client.Get("http://www.icanhazip.com/")
+	*/
 	var next func() (string, error)
-	if server_addr == "" {
+	if serverAddr == "" {
 		go BuildProxy()
 		time.Sleep(time.Second * 5)
 		for len(GetAllProxy()) > 0 { //等待代理获取和测试
+			log.Println("等待代理获取和测试...")
 			time.Sleep(time.Second)
 		}
-		next = RangeProxy(PackGetAllProxy, 2)
+		next = RangeProxy(PackGetAllProxy, delayTime)
 	} else {
-		next = RangeProxy(PackGetAllProxyFromServer(server_addr), 2)
+		next = RangeProxy(PackGetAllProxyFromServer(serverAddr), 2)
 	}
 	return func(client *http.Client) error {
 		proxy, err := next()
+		for i := 2; i > 0 && err != nil; i-- {
+			proxy, err = next()
+		}
 		if err != nil {
 			return err
 		}
@@ -82,6 +98,6 @@ func ProxyClient(server_addr string) func(client *http.Client) error {
 		client.Transport = &http.Transport{
 			Proxy: http.ProxyURL(proxy_url),
 		}
-		return err
+		return nil
 	}
 }
