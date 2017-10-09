@@ -61,6 +61,7 @@ func PackGetAllProxyFromServer(serverAddr string) func() ([]string, error) {
 
 func ProxyClient(serverAddr string, delayTime int) func(client *http.Client) error {
 	/*
+		serverAddr 为空时，使用本地的代理表
 		delayTime为每次调用间隔，最好>=延迟时间
 		   next := proxy.ProxyClient("http://127.0.0.1:8082")
 		   client := &http.Client{
@@ -68,7 +69,6 @@ func ProxyClient(serverAddr string, delayTime int) func(client *http.Client) err
 		   }
 
 		   for err := next(client); err == nil; err = next(client) {
-		           log.Println(client)
 		           resp, err := client.Get("http://www.icanhazip.com/")
 	*/
 	var next func() (string, error)
