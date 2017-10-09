@@ -15,7 +15,6 @@ func GetProxy() (*[]string, error) {
 		if err != nil {
 			log.Println("Waring:", funame, err)
 		}
-		log.Println("GetProxy:", funame, len(*li))
 		for _, i := range *li {
 			mli[i] = t{}
 		}
