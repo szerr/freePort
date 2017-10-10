@@ -9,7 +9,7 @@ import (
 func TestBuildProxy(t *testing.T) {
 	BuildProxy()
 	for i := 0; i < 580; i++ {
-		log.Println(i, len(*ProxyLi))
+		log.Println(i, len(GetAllProxy()))
 		time.Sleep(time.Second)
 	}
 }
