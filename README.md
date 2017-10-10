@@ -23,4 +23,5 @@ for err := next(client) ; == nil; err = next(client) {
 GetAllProxy() 可以获取到本地的代理数据 返回url的字符串列表
 GetAllProxyFromServer(URL) 从服务器获取代理数据 返回url的字符串列表
 
+抓取验证过程视网络或源站点原因可能延迟较长，刚启动是没法马上获取到代理地址的
 注意：即使通过服务验证，免费代理也无法百分百确认可用。如果超时或没得到想要的页面就换代理重试。
