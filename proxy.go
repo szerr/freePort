@@ -1,7 +1,7 @@
 package proxy
 
 import (
-	"./get"
+	"grab/proxy/get"
 	"log"
 	"sync"
 	"time"

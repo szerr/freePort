@@ -14,9 +14,9 @@ func getProxy(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-func Server() {
+func Server(bindAddr string) {
 	http.HandleFunc("/proxy", getProxy)
-	err := http.ListenAndServe(":8082", nil)
+	err := http.ListenAndServe(bindAddr, nil)
 	if err != nil {
 		log.Fatal("ListenAndServer:", err)
 	}

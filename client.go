@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func getAllProxyFromServer(url string) ([]string, error) {
+func GetAllProxyFromServer(url string) ([]string, error) {
 	data := []string{}
 	resp, err := (&http.Client{Timeout: 3}).Get(url + "/proxy")
 	for i := 2; i > 0 && err != nil; i-- {
@@ -56,7 +56,7 @@ func PackGetAllProxy() ([]string, error) {
 }
 
 func PackGetAllProxyFromServer(serverAddr string) func() ([]string, error) {
-	return func() ([]string, error) { return getAllProxyFromServer(serverAddr) }
+	return func() ([]string, error) { return GetAllProxyFromServer(serverAddr) }
 }
 
 func ProxyClient(serverAddr string, delayTime int) func(client *http.Client) error {
