@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+//获取和验证代理，通过代理获取公网地址与本地公网地址匹配，以此排除掉透明代理
 func BuildProxy() {
 	MaxCon := make(chan struct{}, 50000) //这里做并发量限制
 	myip, err := TaobaoMyIp()

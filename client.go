@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+//从服务端获取所有代理
 func GetAllProxyFromServer(url string) ([]string, error) {
 	data := []string{}
 	resp, err := (&http.Client{Timeout: 3}).Get(url + "/proxy")
@@ -26,10 +27,9 @@ func GetAllProxyFromServer(url string) ([]string, error) {
 	return data, nil
 }
 
+//需要一个获取代理数据的回调函数
+//delayTime为每次循环获取的最小间隔时间，防止同一ip调用间隔过短
 func RangeProxy(getAllProxy func() ([]string, error), delayTime int) func() (string, error) {
-	/*需要一个获取代理数据的回调函数
-	delayTime为每次循环获取的最小间隔时间，防止同一ip调用间隔过短
-	*/
 	dtime := Delay()
 	var data []string
 	lend := 0
@@ -59,18 +59,10 @@ func PackGetAllProxyFromServer(serverAddr string) func() ([]string, error) {
 	return func() ([]string, error) { return GetAllProxyFromServer(serverAddr) }
 }
 
+//代理迭代器，
+//serverAddr 远程服务器的url， 为空字符串时，使用本地的代理表。
+//delayTime为每次调用间隔，单位秒，防止同一代理被请求过多，最好>=http.client的timeout时间
 func ProxyClient(serverAddr string, delayTime int) func(client *http.Client) error {
-	/*
-		serverAddr 为空时，使用本地的代理表
-		delayTime为每次调用间隔，最好>=延迟时间
-		   next := proxy.ProxyClient("http://127.0.0.1:8082")
-		   client := &http.Client{
-		           Timeout: time.Second * 3,
-		   }
-
-		   for err := next(client); err == nil; err = next(client) {
-		           resp, err := client.Get("http://www.icanhazip.com/")
-	*/
 	var next func() (string, error)
 	if serverAddr == "" {
 		go BuildProxy()
