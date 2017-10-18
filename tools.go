@@ -8,7 +8,6 @@ import (
 	"time"
 )
 
-//检测代理的有效性，返回透过代理获得的ip和错误信息
 func VerifyProxy(ProxyUrl string) (string, error) {
 	//return ICIp(ProxyUrl)
 	return TaobaoIp(ProxyUrl)
@@ -31,7 +30,6 @@ func ICIp(ProxyUrl string) (string, error) {
 	return string(data), nil
 }
 
-//通过代理地址的get方法
 func GetByProxy(url_addr, proxy_addr string) (*http.Response, error) {
 	request, _ := http.NewRequest("GET", url_addr, nil)
 	proxy, err := url.Parse(proxy_addr)
@@ -87,14 +85,12 @@ func TaobaoMyIp() (string, error) {
 	return info.Data.Ip, nil
 }
 
-//睡眠到某个时间戳，返回当前时间戳
-func Sleep2Time(STime int64) int64 {
+func Sleep2Time(STime int64) int64 { //睡眠到某个时间戳，返回当前时间戳
 	time.Sleep(time.Duration(STime-time.Now().Unix()) * time.Second)
 	return time.Now().Unix()
 }
 
-//延迟返回某个时间，单位是秒
-func Delay() func(int) {
+func Delay() func(int) { //延迟返回某个时间，单位是秒
 	var ptime int64 = 0
 	return func(STime int) {
 		Sleep2Time(ptime)
