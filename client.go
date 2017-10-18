@@ -66,8 +66,8 @@ func ProxyClient(serverAddr string, delayTime int) func(client *http.Client) err
 	var next func() (string, error)
 	if serverAddr == "" {
 		go BuildProxy()
-		time.Sleep(time.Second * 5)
-		for len(GetAllProxy()) > 0 { //等待代理获取和测试
+		time.Sleep(time.Second * 20)  //给抓取验证的时间
+		for len(GetAllProxy()) == 0 { //等待代理获取和测试
 			log.Println("等待代理获取和测试...")
 			time.Sleep(time.Second)
 		}
