@@ -3,7 +3,6 @@ package proxy
 import (
 	"grab/proxy/get"
 	"log"
-	"sync"
 	"time"
 )
 
@@ -15,7 +14,7 @@ func BuildProxy() {
 		log.Fatal("Get MyIP:", err)
 	}
 	for {
-		proxyM := new(sync.Map)
+		proxyM := NewSyncMap()
 		var data *[]string
 		for data, err = get.GetProxy(); err != nil; data, err = get.GetProxy() {
 			time.Sleep(time.Second)

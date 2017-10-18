@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"sync"
 	"time"
 )
 
@@ -99,5 +100,32 @@ func Delay() func(int) {
 	return func(STime int) {
 		Sleep2Time(ptime)
 		ptime = time.Now().Unix() + int64(STime)
+	}
+}
+
+func NewSyncMap() *SyncMap {
+	return &SyncMap{data: make(map[string]interface{})}
+}
+
+type SyncMap struct {
+	data map[string]interface{}
+	Lock sync.Mutex
+}
+
+func (s SyncMap) Store(key string, value interface{}) {
+	s.Lock.Lock()
+	s.data[key] = value
+	s.Lock.Unlock()
+}
+
+func (s SyncMap) Delete(key string) {
+	s.Lock.Lock()
+	delete(s.data, key)
+	s.Lock.Unlock()
+}
+
+func (s SyncMap) Range(f func(interface{}, interface{}) bool) {
+	for k, i := range s.data {
+		f(k, i)
 	}
 }

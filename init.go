@@ -1,15 +1,13 @@
 package proxy
 
-import (
-	"sync"
-)
+import ()
 
 type ProxyInfo struct{}
 
 var (
-	ProxyMap *sync.Map
+	ProxyMap *SyncMap
 )
 
 func init() {
-	ProxyMap = new(sync.Map)
+	ProxyMap = NewSyncMap()
 }
