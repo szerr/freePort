@@ -1,13 +1,17 @@
-##抓取和验证免费http代理，提供远程或本地客户端
+抓取和验证免费http代理，提供远程或本地客户端
+==
 
 [toc]
 
-###用法：
-####远程：
+用法：
+==
+远程：
+--
 ``` go
 next := proxy.ProxyClient(ProxyServerURL, 6)
 ```
-####本地:
+本地:
+--
 ```go
 go proxy.BuildProxy() //抓取/验证服务
 next := proxy.ProxyClient("", 6)
@@ -22,7 +26,8 @@ for err := next(client) ; err == nil; err = next(client) {
     resp, err := cleint.Get(URL)
 }
 ```
-####服务器：
+服务器：
+--
 ```go
         go proxy.BuildProxy()
         proxy.Server(":8082")
